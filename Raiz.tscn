@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://RaqueteEsquerda.gd" type="Script" id=1]
+[ext_resource path="res://RaqueteDireita.gd" type="Script" id=2]
+[ext_resource path="res://Bola.gd" type="Script" id=3]
+[ext_resource path="res://Raiz.gd" type="Script" id=4]
+[ext_resource path="res://pixelmix.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://rebate.wav" type="AudioStream" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 50 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 10, 50 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8, 8 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 72
+font_data = ExtResource( 5 )
+
+[node name="Raiz" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="RaqueteEsquerda" type="Area2D" parent="."]
+position = Vector2( 21, 315 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RaqueteEsquerda"]
+shape = SubResource( 1 )
+
+[node name="Polygon2D" type="Polygon2D" parent="RaqueteEsquerda"]
+polygon = PoolVector2Array( -10, -50, 10, -50, 10, 50, -10, 50 )
+
+[node name="RaqueteDireita" type="Area2D" parent="."]
+position = Vector2( 1159, 329 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RaqueteDireita"]
+shape = SubResource( 2 )
+
+[node name="Polygon2D" type="Polygon2D" parent="RaqueteDireita"]
+polygon = PoolVector2Array( -10, -50, 10, -50, 10, 50, -10, 50 )
+
+[node name="Bola" type="Area2D" parent="."]
+position = Vector2( 560, 314 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+audio = NodePath("../AudioStreamPlayer")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bola"]
+shape = SubResource( 3 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Bola"]
+polygon = PoolVector2Array( -8, -8, 8, -8, 8, 8, -8, 8 )
+
+[node name="PontoEsquerda" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 4 )
+text = "0"
+
+[node name="PontoDireita" type="Label" parent="."]
+margin_top = 14.0
+margin_right = 54.0
+margin_bottom = 86.0
+custom_fonts/font = SubResource( 4 )
+text = "0"
+align = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[connection signal="area_entered" from="Bola" to="Bola" method="_on_Bola_area_entered"]
+[connection signal="ponto_dir" from="Bola" to="." method="_on_Bola_ponto_dir"]
+[connection signal="ponto_esq" from="Bola" to="." method="_on_Bola_ponto_esq"]
